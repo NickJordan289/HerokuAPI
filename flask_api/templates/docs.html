@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>API Docs!</h1>
+
+    <p><b>GET</b> {{url_for('get_tasks',_external=True)}}?api_key=<b>YOUR-API-KEY</b></p>
+    {% if current_user.is_authenticated %}
+        <button id="req1" type="button" onclick="test()">Make Request</button>    
+        <p>Response</p>
+        <pre id="response"></pre>
+        <script>
+            function test() {
+                const http = new XMLHttpRequest()
+
+                http.open("GET", "{{url_for('get_tasks',_external=True)}}?api_key="+"{{current_user.api_key[0].key}}") // should we perform this clientside?
+                http.send()
+                
+                http.onload = () => document.getElementById("response").innerHTML = http.responseText;
+                //document.getElementById("json").innerHTML = {{data|tojson|safe}};
+            }
+        </script>
+    {% endif %}
+
+    <p><b>GET</b> {{url_for('get_task',task_id=1,_external=True)}}?api_key=<b>YOUR-API-KEY</b></p>
+    {% if current_user.is_authenticated %}
+        <button id="req2" type="button" onclick="test2()">Make Request</button>    
+        <p>Response</p>
+        <pre id="response2"></pre>
+        <script>
+            function test2() {
+                const http = new XMLHttpRequest()
+
+                http.open("GET", "{{url_for('get_task',task_id=1,_external=True)}}?api_key="+"{{current_user.api_key[0].key}}") // should we perform this clientside?
+                http.send()
+                
+                http.onload = () => document.getElementById("response2").innerHTML = http.responseText;
+                //document.getElementById("json").innerHTML = {{data|tojson|safe}};
+            }
+        </script>
+    {% endif %}
+
+{% endblock content %}  

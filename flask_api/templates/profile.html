@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>API Profile!</h1>
+
+    {% if form %}
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            {% if current_user.is_authenticated %}
+                {% if current_user.api_key|length > 0 %}
+                
+                    <input id="apikey" class="key-text" type="password" style="width: 350px" readonly value={{current_user.api_key[0].key}}>
+                    <button id="toggle" type="button" onclick="toggle_show()">Show</button>
+                    <button class="copy_key" type="button">Copy</button>
+
+                    {% if expired %}
+                        <p class=text-danger>
+                            <b>Expired: {{ expiration_str }}</b>
+                        </p>
+                    {% else %}
+                        <p class>
+                            <b>Expires: {{ expiration_str }}</b>
+                        </p>
+                    {%endif%}
+
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                {% else %}
+                    <p>No API Key</p>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </form>
+    {% endif %}
+	
+    <script>
+        function toggle_show(){
+            var key = document.getElementById("apikey");
+            var tog = document.getElementById("toggle")
+            key.type=key.type=="password"?"text":"password";
+            tog.innerHTML = tog.innerHTML=="Show"?"Hide":"Show"
+        }
+
+        document.querySelector(".copy_key").addEventListener('click', function(event) {
+            key = document.querySelector(".key-text");
+            
+            toggle_show();
+            key.focus();
+            key.select();
+            document.execCommand('copy');
+            toggle_show();
+        });
+    </script>
+{% endblock content %}

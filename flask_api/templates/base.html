@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		<!-- Required meta tags -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+		{% if title %}
+			<title>Flask - {{title}}</title>
+		{% else %}
+			<title>Flask</title>
+		{% endif %}
+
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='main.css') }}" />
+		<script src="{{ url_for('static', filename='main.js') }}"></script>
+		
+	</head>
+	
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>                        
+			</button>
+			<a class="navbar-brand" href="/">API</a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+			<ul class="nav navbar-nav">
+				<li {% if request.endpoint == 'index' %} class="active" {% endif %} ><a href="{{url_for('index')}}">Home</a></li>
+				<li {% if request.endpoint == 'about' %} class="active" {% endif %} ><a href="{{url_for('about')}}">About</a></li>
+				<li {% if request.endpoint == 'docs' %} class="active" {% endif %} ><a href="{{url_for('docs')}}">Documentation</a></li>
+				<li {% if request.endpoint == 'profile' %} class="active" {% endif %} ><a href="{{url_for('profile')}}">Profile</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				{%if current_user.is_authenticated%}
+					<li><a href="{{url_for('logout')}}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+					<li><a href="{{url_for('profile')}}"><span class="glyphicon glyphicon-user"></span> {{current_user.username}}</a></li>            
+				{%else%}
+					<li><a href="{{url_for('login')}}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+					<li><a href="{{url_for('register')}}"><span class="glyphicon glyphicon-edit"></span> Register</a></li>
+				{%endif%}
+			</ul>
+			</div>
+		</div>
+	</nav>
+        
+	<body>
+		<div class="container">
+			{% with messages = get_flashed_messages(with_categories=true) %}
+				{% if messages %}
+					{% for category, message in messages %}
+						<div class="alert alert-{{category}}">
+							{{message}}
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+
+			{% block content %} {% endblock %}
+		</div>
+
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			crossorigin="anonymous"></script>
+	</body>
+</html>
