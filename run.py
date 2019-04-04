@@ -1,3 +1,4 @@
+import os
 from flask_api import app, db
 from flask_api.models import users, apikeys
 
